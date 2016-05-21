@@ -3,7 +3,7 @@
 ##Getting Started
 
 - Extract the 2015 thesaurus and segment-keywords XML zips to the ../data folder. 
-- Change the 'config,py' file in ./common to reflect the database to write the 
+- Change the 'config.py' file in ./common to reflect the database to write the 
 Testimonies, Thesaurus and the SegmentKeywords tables to and a username and password combination to access it. 
 - Please create the following tables in the database to write xml data:
 
