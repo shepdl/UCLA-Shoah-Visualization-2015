@@ -6,17 +6,17 @@
 
 ```
 create table thesaurusNew2015 (
-TermID INT, 
-TermLabel varchar(400), 
-ParentTermID INT, 
-ParentTermLabel varchar(500), 
-OldTermID INT, 
-ThesaurusID INT, 
-ThesaurusType varchar(10), 
-KeywordCount INT, 
-TypeID INT, 
-IsParent varchar(6), 
-KWDefinition varchar(5000)
+	TermID INT, 
+	TermLabel varchar(400), 
+	ParentTermID INT, 
+	ParentTermLabel varchar(500), 
+	OldTermID INT, 
+	ThesaurusID INT, 
+	ThesaurusType varchar(10), 
+	KeywordCount INT, 
+	TypeID INT, 
+	IsParent varchar(6), 
+	KWDefinition varchar(5000)
 ); 
 ```
 
