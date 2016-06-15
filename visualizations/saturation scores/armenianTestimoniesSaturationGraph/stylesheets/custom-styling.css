@@ -1,0 +1,27 @@
+
+
+
+.jumbotron{
+	min-height:500px;
+	
+	/*background:red;*/
+}
+
+.bar{
+	color:#428bca;
+}
+
+h3{
+	color:#7B498D;
+}
+
+tr{
+	height:20px;
+}
+td{
+	width:140px;
+}
+svg{
+	border-radius:5px;
+}
+

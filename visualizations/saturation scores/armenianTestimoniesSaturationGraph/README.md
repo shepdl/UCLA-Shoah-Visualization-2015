@@ -1,5 +1,5 @@
 
-### Visualization of Saturation Scores of Jewish Survivor Testimonies
+### Visualization of Saturation Scores of Armenian Survivor Testimonies
 
 This helps display the saturations score of each of the testimonies as a bargraph.
 Each of the bars on click drop down atmost 100 testimonies in the set they represent. 
