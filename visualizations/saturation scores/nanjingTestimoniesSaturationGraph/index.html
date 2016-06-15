@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css"/>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.12/angular.min.js"></script>
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<link rel="stylesheet" type="text/css" href="stylesheets/custom-styling.css"/>
+</head>
+<body ng-app="thresholdLookup">
+	
+	<div class="container"  ng-controller="TestimonyController as testimonyCtrl">
+	</br>
+</br>
+<div class="jumbotron" ng-init="preprocessData()">
+	<h3>Testimonies Vs Saturation Percent Histogram :: Nanjing Massacre (2015)</h3> 				
+	<div id="graph"></div>
+</div> 
+<div id="#details" ng-mouseover="refreshCheck()"> 
+	
+	
+	Testimonies in Bar #{{currentBin}}: {{countArray[currentBin] / scale}}
+	<table class="table table-striped">
+		<tr>
+			<td align="left"> IntCode </td>
+			<td align="left"> Interviewee Name</td>
+			<td align="left"> Tot. Tagged Segments</td>
+			<td align="left"> Tot. Segments</td>
+			<td align="left"> Saturation Percent</td>
+		</tr>
+	</table>
+	<div ng-repeat="(key,testimony) in testimonyDetails10" >
+		<div ng-show="key==currentBin">
+			<table class="table table-striped" ng-repeat="tmony in testimony ">
+				<tr>	
+					<td align="left">{{tmony.Intcode}}</td> 
+					<td align="left">{{tmony.IntervieweeName}}</td>	
+					<td align="left">{{tmony.TotTaggedSegments}}</td>
+					<td align="left">{{tmony.TotSegments}}</td>
+					<td align="left">{{tmony.SaturationPercent}}</td>				
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+</div>	
+<!-- <script type="text/javascript" src="js/d3.min.js"></script> -->
+<!-- <script type="text/javascript" src="js/angular.min.js"></script>-->
+<script type="text/javascript" src="app.js"></script>
+</body>
+</html>
