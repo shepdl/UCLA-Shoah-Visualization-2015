@@ -2,9 +2,9 @@ import MySQLdb
 import config
 
 HOST = "localhost"
-USER = 'root'
-PASSWORD = ''
-DB = 'shoah_2015'
+USER = "root"
+PASSWORD = ""
+DB = "shoah_2015"
 CHARSET = "utf8"
 UNICODE = True
 

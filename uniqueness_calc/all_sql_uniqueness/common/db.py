@@ -2,10 +2,10 @@ import MySQLdb
 import config
 
 HOST = "localhost"
-USER = 'root'
-PASSWORD = ''
-DB = 'shoah_2015'
 CHARSET = "utf8"
+USER = 'root'
+DB = 'shoah_2015'
+PASSWORD = ''
 UNICODE = True
 
 connection = MySQLdb.connect(host=HOST,user=USER,passwd=PASSWORD,

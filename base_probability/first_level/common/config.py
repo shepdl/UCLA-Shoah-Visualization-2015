@@ -1,8 +1,8 @@
 
 # Database Access as Global Variables
 # TODO:
-USER = "" 
+USER = "root" 
 PASSWORD = ""
-DB = ""
+DB = "shoah_2015"
 
 

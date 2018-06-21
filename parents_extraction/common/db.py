@@ -1,5 +1,5 @@
 import MySQLdb
-import config
+from config import *
 
 HOST = "localhost"
 CHARSET = "utf8"

@@ -1,7 +1,7 @@
+from __future__ import division
 import common.db as db
 import csv
 import json
-from __future__ import division
 from math import floor, ceil
 
 # Getting all the unique parents first. And then creating the parents table 
@@ -59,7 +59,7 @@ cursor1.close()
 testimonies = testimony_details_pruned
 query1 = """
 SELECT SecondLevelParentID
-FROM copyFilledSegmentKeywordsSecondParents2015b
+FROM filledSegmentKeywordsSecondParents2015b
 WHERE IntCode = %s
 AND SegmentPercentile = %s
 """

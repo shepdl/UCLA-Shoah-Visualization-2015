@@ -63,22 +63,27 @@ insert_query = """
 INSERT INTO firstLevelParents2015 (TermID, TermLabel) values (%s, %s)
 """
 cursor = db.get_cursor()
+cursor.execute('TRUNCATE TABLE firstLevelParents2015')
 for TermID in primary_parents:
 	cursor.execute(insert_query, (TermID, primary_parents[TermID]))
 conn = db.get_connection()
 conn.commit()
 cursor.close()
 
+print "First level parents inserted"
+
 
 insert_query = """
 INSERT INTO secondLevelParents2015 (TermID, TermLabel) values (%s, %s)
 """
-cursor = db.get_cursor()
+cursor = conn.cursor()
+cursor.execute('TRUNCATE TABLE secondLevelParents2015')
 for TermID in secondary_parents:
         cursor.execute(insert_query, (TermID, secondary_parents[TermID]))
-conn = db.get_connection()
 conn.commit()
 cursor.close()
+
+print "Second level parents inserted"
 
 
 # Now, climbing the tree to look for the first and second level parents. 
@@ -96,7 +101,10 @@ while True:
 	if row: 
 		testimonies[row["IntCode"]]  = row["IntervieweeName"]
 
+db.get_connection().commit()
 cursor.close()
+
+print "Loaded interviewee names"
 
 
 # Process Testimonies one at a time. 
@@ -117,6 +125,7 @@ def findParents(TermID, parentHits, secondaryHits, checked):
 					break
 				if row:
 					set[str(row["ParentTermID"])] = row["ParentTermLabel"]
+                        db.get_connection().commit()
 			cursor.close()
 
 			for ParentTermID in set:
@@ -140,6 +149,11 @@ select_query = """
 
 
 count = 1
+
+print "Writing information about testimonies and segments ..."
+cursor = db.get_cursor()
+cursor.execute('TRUNCATE TABLE segmentKeywordsFirstParents2015')
+cursor.execute('TRUNCATE TABLE segmentKeywordsSecondParents2015b')
 for tmony in testimonies: 
 	if(True): 
 		cursor = db.get_cursor()
@@ -162,13 +176,13 @@ for tmony in testimonies:
 								VALUES (%s, %s, %s, %s, %s, %s, %s)
 								"""
 				insert_querySecond = """
-                                INSERT INTO segmentKeywordsSecondParents2015b 
-                                (IntCode, SegmentNumber, SegmentID, TermID, TermLabel, SecondLevelParentID, ParentLabel) 
-                                VALUES (%s, %s, %s, %s, %s, %s, %s)
+                                    INSERT INTO segmentKeywordsSecondParents2015b 
+                                    (IntCode, SegmentNumber, SegmentID, TermID, TermLabel, SecondLevelParentID, ParentLabel) 
+                                    VALUES (%s, %s, %s, %s, %s, %s, %s)
                                 """
 				select_query2 = """
-								SELECT TermLabel FROM thesaurusNew2015 WHERE TermID = %s
-								"""
+                                        SELECT TermLabel FROM thesaurusNew2015 WHERE TermID = %s
+                                """
 				firstLevelHits, secondLevelHits = findParents(TermID, [], [], [])	
 				for parent in firstLevelHits:
 					cursor2 = db.get_cursor()
@@ -177,22 +191,29 @@ for tmony in testimonies:
 					ParentLabel = "None"
 					if row:
 						ParentLabel = row["TermLabel"]
+                                        db.get_connection().commit()
 					cursor2.close()
 					cursor3 = db.get_cursor()
 					cursor3.execute(insert_queryFirst, (tmony, SegmentNumber, SegmentID, TermID, TermLabel, parent, ParentLabel))
+                                        db.get_connection().commit()
 					cursor3.close()
 				for parent in secondLevelHits:
- 					cursor2 = db.get_cursor()
-                    cursor2.execute(select_query2, [parent])
-                    row = cursor2.fetchone()
-					ParentLabel = "None"
-                    if row:
-                    	ParentLabel = row["TermLabel"]
-                    cursor2.close()
-                    cursor3 = db.get_cursor()
-                    cursor3.execute(insert_querySecond, (tmony, SegmentNumber, SegmentID, TermID, TermLabel, parent, ParentLabel))
-                    cursor3.close()
+                                    cursor2 = db.get_cursor()
+                                    cursor2.execute(select_query2, [parent])
+                                    row = cursor2.fetchone()
+                                    ParentLabel = "None"
+                                    if row:
+                                        ParentLabel = row["TermLabel"]
+                                    db.get_connection().commit()
+                                    cursor2.close()
+                                    cursor3 = db.get_cursor()
+                                    cursor3.execute(insert_querySecond, (tmony, SegmentNumber, SegmentID, TermID, TermLabel, parent, ParentLabel))
+                                    db.get_connection().commit()
+                                    cursor3.close()
+                db.get_connection().commit()
 		cursor.close()
 	count = count + 1
+        if count > 0 and count % 1000 == 0:
+            print "{} testimonies completed".format(count)
 
 

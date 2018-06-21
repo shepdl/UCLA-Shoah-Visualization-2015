@@ -22,7 +22,6 @@ while True:
 	if not row:
 		break
 	else:
-		print row["TermID"]
 		i = 1
 		parentsTable[row["TermID"]] = {}
 		for i  in range(1,101):
@@ -30,9 +29,9 @@ while True:
 cursor1.close()
 
 
-print "\n ### \n"
-print(len(parentsTable))
-print "\n ### \n"
+# print "\n ### \n"
+# print(len(parentsTable))
+# print "\n ### \n"
 
 # This is for only ShortFormID = 2, Even Testimonies and Pruned with SaturationScore >= 0.20
 # And now, further pruned with TotSegment >= 40. 
@@ -70,7 +69,7 @@ testimonies = testimony_details_pruned
 
 query1 = """
 SELECT FirstLevelParentID
-FROM copyFilledSegmentKeywordsFirstParents2015
+FROM filledSegmentKeywordsFirstParents2015
 WHERE IntCode = %s
 AND SegmentPercentile = %s
 """
@@ -79,8 +78,8 @@ count = 1
 for tmony in testimonies:
 	if True:	 
 		tot_len = testimonies[tmony]["TotSegments"]
-		print "#" + str(count) + ": For testimony: " + str(tmony)
-		print "The total length of the testimony is : " + str(tot_len)	
+		# print "#" + str(count) + ": For testimony: " + str(tmony)
+		# print "The total length of the testimony is : " + str(tot_len)	
 		for segmentile in range(1,101):
 			
 			cursor1 = db.get_cursor()
@@ -106,23 +105,54 @@ for tmony in testimonies:
 tot_tmonies = len(testimonies)
 parentsProbabilityTable = parentsTable
 
+keywordCounts = []
+
+for i in range(1,101):
+    thisSegmentSum = 0
+    for parID in parentsProbabilityTable:
+        thisSegmentSum += parentsProbabilityTable[parID][i]
+
+    keywordCounts.append(thisSegmentSum)
+        
+
 for parID in parentsProbabilityTable:
-	for i in range(1,101):
-		parentsProbabilityTable[parID][i] = parentsProbabilityTable[parID][i]/tot_tmonies
+    for i in range(1,101):
+        parentsProbabilityTable[parID][i] = parentsProbabilityTable[parID][i] / keywordCounts[i - 1]
+
+for i in range(1, 101):
+    total_this_moment = 0.0
+    for parID in parentsProbabilityTable:
+        total_this_moment += parentsProbabilityTable[parID][i]
+    if total_this_moment != 1.0:
+        # print "Total at {} only adds up to {}".format(i, total_this_moment)
+        pass
+
 
 query1 = """
 insert into firstLevelBaseProbabilities2015 
-values %r
+values ({})
 """
 cursor1 = db.get_cursor()
+# cursor.execute('CREATE TABLE IF NOT EXISTS firstLevelBaseProbabilities ()')
+cursor1.execute('DROP TABLE IF EXISTS firstLevelBaseProbabilities2015')
+cursor1.execute('CREATE TABLE firstLevelBaseProbabilities2015 (TermID INT, TermLabel VARCHAR(255), {} FLOAT)'.format(' FLOAT, '.join([
+    'L{}'.format(x) for x in range(1, 101)
+])
+))
+# cursor1.execute('TRUNCATE TABLE firstLevelBaseProbabilities201')
 parS = parentsProbabilityTable
-for i in range(1,101):
-	varlist = []
-	varlist.append(str(i))
-	for parId in parS:
-		varlist.append(str(parS[parId][i]))
-	query2 = query1 % (tuple(varlist),)\
-	cursor1.execute(query2)
+for parID, segments in parentsProbabilityTable.items():
+    ordered_segments = [segments[x] for x in sorted(segments)]
+    print query1.format(', '.join([str(x) for x in [parID, '',] + [x for x in ordered_segments]]))
+    cursor1.execute(query1.format(', '.join([str(x) for x in [parID, "''",] + [x for x in ordered_segments]])))
+
+# for i in range(1,101):
+# 	varlist = []
+# 	varlist.append(str(i))
+# 	for parId in parS:
+# 		varlist.append(str(parS[parId][i]))
+# 	query2 = query1 % (tuple(varlist),)
+# 	cursor1.execute(query2)
 
 conn = db.get_connection()
 conn.commit()
