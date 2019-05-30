@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <title>Topic Stream</title>
+        <link type="text/css" href="timeline.css" rel="stylesheet" />
+        <link type="text/css" href="http://mbostock.github.com/protovis/style.css?3.2" rel="stylesheet" />
+        <style type="text/css">
+            #fig {
+                width: 1000px;
+                height: 800px;
+            }
+            #category-list-item-template {
+                display: none;
+            }
+            .category {
+                float:left;
+                background: red;
+                margin: 2px;
+                cursor: pointer;
+            }
+            .active {
+                background: green;
+            }
+            ul {
+                margin-top: 10px;
+            }
+            li {
+                display: inline;
+                padding: 10px;
+                background: lightblue;
+            }
+        </style>
+        <!--script type="text/javascript" src="http://mbostock.github.com/protovis/protovis-r3.2.js"></script-->
+        <script type="text/javascript" src="http://www.google.com/jsapi?key=ABQIAAAAtHf2Vbojx_f9l2digk62nRR721nvlaDHrh7xkOtCxSM-c80RpRRMoUR4qEAqmJpECcqpdsdEs7YdIw&autoload={'modules':[{'name':'jquery','version':'1.7.1'}]}"></script> 
+        <script type="text/javascript" src="protovis-r3.2.js"></script>
+        <!--script type="text/javascript" src="ps3.js"></script-->
+        <!--
+        <script src="jewish-survivor.js"></script>
+        -->
+        <!--script type="text/javascript" src="http://mbostock.github.com/protovis/ex/jobs.js"></script-->
+        <script type="text/javascript" src="timestream.js"></script>
+    </head>
+    <body>
+        <ul class="groups">
+            <li>
+                <a href="javascript:getData('jewish-survivor')">
+                    Jewish Survivor
+                </a>
+            </li>
+            <li>
+                <a href="javascript:getData('tutsi-survivor')">
+                    Tutsi Survivor
+                </a>
+            </li>
+            <li>
+                <a href="javascript:getData('nanjing-massacre-survivor')">
+                    Nanjing Massacre Survivor
+                </a>
+            </li>
+            <li>
+                <a href="javascript:getData('armenian-survivor')">
+                    Armenian Survivor
+                </a>
+            </li>
+            <li>
+                <a href="javascript:getData('sinti-and-roma-survivor')">
+                    Sinti and Roma Survivor
+                </a>
+            </li>
+        </ul>
+        <div id="properties">
+            <ul id="category-list">
+                <li id="category-list-item-template" class="category"></li>
+            </ul>
+        </div>
+        <div id="fig">
+        </div>
+        <table id="table" style="float: right;">
+        </table>
+    </body>
+</html>
